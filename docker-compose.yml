@@ -1,0 +1,17 @@
+services:
+  mysql:
+    image: mysql:8.3.0                # Use MySQL 8.3.0 image
+    container_name: mysql            # Name the container "mysql"
+    restart: always                  # Auto-restart if container stops
+    environment:                     # Set environment variables inside the container
+      MYSQL_ROOT_PASSWORD: password  # Root password for MySQL
+      MYSQL_DATABASE: ticketing      # DB that will be created automatically
+    ports:
+      - "3306:3306"                  # Host:Container port mapping (used to connect from outside)
+    volumes:                         # Mount folders for persistent data
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql  # SQL file that runs on start
+      - db-data:/var/lib/mysql       # Store actual DB files
+      - db-data:/var/log/mysql       # Store MySQL logs
+
+volumes:
+  db-data:                           # Named volume (for persistence)
